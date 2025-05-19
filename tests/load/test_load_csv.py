@@ -7,18 +7,18 @@ from utils.load_data.load_csv import load_csv
 class TestLoad(unittest.TestCase):
 
     def setUp(self):
-        # Setup file sementara untuk pengujian
+        # Setup temporary files for testing
         self.temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
         self.filename = self.temp_file.name
         self.temp_file.close()
 
     def tearDown(self):
-        # Hapus file setelah pengujian selesai
+        # Delete files after testing is complete
         if os.path.exists(self.filename):
             os.remove(self.filename)
 
     def test_load_data_success(self):
-        # Menguji apakah data berhasil disimpan ke file CSV
+        # Testing whether the data was successfully saved to a CSV file
         data = {
             "Title": ["Product A"],
             "Price": [160000],
@@ -37,7 +37,7 @@ class TestLoad(unittest.TestCase):
         pd.testing.assert_frame_equal(df, df_loaded, check_dtype=False)
 
     def test_load_data_failure(self):
-        # Menguji apakah exception ditangani dengan benar jika path tidak valid
+        # Test whether exceptions are handled correctly if the path is invalid.
         data = {
             "Title": ["Product A"],
             "Price": [160000],

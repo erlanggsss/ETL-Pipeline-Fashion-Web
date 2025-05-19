@@ -6,7 +6,7 @@ from utils.load_data.load_postgre import load_postgre
 class TestLoadPostgre(unittest.TestCase):
     @patch("utils.load_data.load_postgre.psycopg2.connect")
     def test_load_postgre_success(self, mock_connect):
-        """Test berhasil menyimpan ke PostgreSQL."""
+        """Test successfully saved to PostgreSQL."""
         mock_conn = MagicMock()
         mock_cursor = MagicMock()
         mock_connect.return_value = mock_conn

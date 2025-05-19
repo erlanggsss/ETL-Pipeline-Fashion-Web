@@ -3,7 +3,6 @@ import logging
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-# Konfigurasi logging 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s: %(message)s',
@@ -11,40 +10,40 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-SPREADSHEET_ID = "1EUa65GLeKgyEoZMAnOvYIj4DdctIzn4f_MSKijFxVVQ"
-SHEET_NAME = "Sheet1"
+SPREADSHEET_ID = "[SHEET_ID]"
+SHEET_NAME = "[SHEET_NAME]"
 
 def load_sheets(df: pd.DataFrame):
     """
-    Mengunggah dataframe ke Google Sheets
+    Uploading a dataframe to Google Sheets
 
     Args:
-    df (pd.DataFrame): DataFrame yang akan diunggah
-    config (Dict[str, str], optional): Konfigurasi Google Sheets. 
+    df (pd.DataFrame): DataFrame to upload
+    config (Dict[str, str], optional): Google Sheets configuration.
     Defaults to SPREADSHEET_CONFIG.
 
     Returns:
-    dict | None: Respons dari API Google Sheets jika berhasil, None jika terjadi kesalahan.
+    dict | None: Response from Google Sheets API on success, None on error.
     """
     if df.empty:
         logger.warning("Tidak terdapat data untuk diunggah ke Google Sheets.")
         return
     
     try:
-        # Autentikasi menggunakan service account
+        # Authentication Spredsheet using service account
         creds = service_account.Credentials.from_service_account_file(
         "google-sheets-api.json",
         scopes=["https://www.googleapis.com/auth/spreadsheets"]
         )
        
-       # Inisialisasi layanan Google Sheets
+       # Initiate Google Sheet service
         service = build("sheets", "v4", credentials=creds)
         sheet = service.spreadsheets()
 
-        # Persiapan data
+        # Data Preparation
         values = [df.columns.tolist()] + df.values.tolist()
         
-        # Eksekusi request
+        # Request execution
         request = sheet.values().update(
             spreadsheetId=SPREADSHEET_ID,
             range=SHEET_NAME,
@@ -52,7 +51,7 @@ def load_sheets(df: pd.DataFrame):
             body={"values": values}
         )
 
-        # Mengirim request dan menerima respons
+        # Send request and receive response
         response = request.execute()
 
         logger.info("Data berhasil diunggah ke Google Sheets")

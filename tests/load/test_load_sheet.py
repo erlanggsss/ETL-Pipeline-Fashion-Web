@@ -7,7 +7,7 @@ class TestLoadSheet(unittest.TestCase):
     @patch("utils.load_data.load_sheet.service_account.Credentials")
     @patch("utils.load_data.load_sheet.build")
     def test_load_sheet_success(self, mock_build, mock_credentials):
-        """Test berhasil unggah ke Google Sheets."""
+        """Test successfully uploaded to Google Sheets."""
         df = pd.DataFrame({
             "title": ["Item A"],
             "price": [100],

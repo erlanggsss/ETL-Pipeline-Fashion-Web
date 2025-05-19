@@ -1,6 +1,6 @@
 import pandas as pd
 import logging
-# Konfigurasi logging
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s: %(message)s',
@@ -8,25 +8,24 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Konstanta konfigurasi
+# Configuration constants
 EXCHANGE_RATE = 16000
 REQUIRED_COLUMNS = {"Title", "Price", "Rating", "Colors"}
 
 def validate_input_data(data):
     """
-    Memvalidasi data input sebelum transformasi.
+    Validate input data before transformation.
 
     Args:
-    data: Data mentah hasil scraping
+    data: Raw data scraping result
 
     Returns:
-    bool: True jika data valid, False sebaliknya
+    bool: True if data is valid, False otherwise
     """
     if not data:
         logger.warning("Data kosong")
         return False
     
-    # Periksa struktur data
     try:
         df = pd.DataFrame(data)
         missing_columns = REQUIRED_COLUMNS - set(df.columns)
@@ -43,31 +42,31 @@ def validate_input_data(data):
 
 def transform_data(data, exchange_rate=EXCHANGE_RATE):
     """
-    Membersihkan dan mengubah format data dengan transformasi lanjut.
+    Clean and transform data with advanced transformations.
 
     Args:
-        data: Raw data hasil scraping
-        exchange_rate: Nilai tukar mata uang. Default sesuai EXCHANGE_RATE.
+    data: Raw data scraped
+    exchange_rate: Currency exchange rate. Defaults to EXCHANGE_RATE.
 
     Returns:
-        DataFrame: Data yang telah ditransformasi
+    DataFrame: Transformed data
     """
-    # Validasi input data
+    # Validate input data
     if not validate_input_data(data):
         return pd.DataFrame()
 
     try:
-        # Konversi ke DataFrame
+        # Convert into Dataframe
         df = pd.DataFrame(data).copy()
         
-        # Preprocessing kolom
+        # Exchange Dollars into Rupiah
         df["Price"] = (
             pd.to_numeric(df["Price"], errors="coerce")
             .mul(exchange_rate)
             .round(2)
         )
         
-        # Transformasi Rating
+        #  Rating Transformation
         df["Rating"] = (
             df["Rating"]
             .astype(str)
@@ -79,7 +78,7 @@ def transform_data(data, exchange_rate=EXCHANGE_RATE):
             inplace=True
         )
         
-        # Transformasi Colors
+        # Colors Transformation
         df["Colors"] = (
             pd.to_numeric(df["Colors"], errors="coerce")
             .fillna(0)

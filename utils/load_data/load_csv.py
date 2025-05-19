@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 
-# Konfigurasi logging
+# Logging configuration
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s: %(message)s',
@@ -10,24 +10,24 @@ logging.basicConfig(
 
 def load_csv(df, filename="products.csv"):
     """
-    Menyimpan DataFrame ke file CSV dengan validasi dasar.
+    Saves a DataFrame to a CSV file with basic validation.
 
     Args:
-    df (pd.DataFrame): DataFrame yang akan disimpan
-    filename (str, optional): Nama file CSV. Defaults to "products.csv"
+    df (pd.DataFrame): The DataFrame to save
+    filename (str, optional): The name of the CSV file. Defaults to "products.csv"
 
     Raises:
-    ValueError: Jika DataFrame kosong atau None
-    Exception: Jika terjadi kesalahan saat menulis file
+    ValueError: If the DataFrame is empty or None
+    Exception: If an error occurred while writing the file
     """
 
-    # Validasi Dataframe
+    # Dataframe validation
     if df.empty:
         logging.warning("Tidak terdapat data untuk disimpan.")
         return
     
     try:
-        # Menyimpan DataFrame ke CSV
+        # Saving Dataframe into csv
         df.to_csv(
             filename, 
             index=False, 

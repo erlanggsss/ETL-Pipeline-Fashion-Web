@@ -1,39 +1,39 @@
-# Menginisiasi python environment
+# Initiate python environment
 py -m venv .env
 
-# Mengaktifkan environment
+# Activate env
 Powershell
 .env\Scripts\Activate\ps.1
 
 CMD
 .env\Scripts\Activate\bat
 
-# Mengunduh library pada file requirements.txt
+# install libraries in the requirements.txt file
 pip install -r requirements.txt
 
-# Membuat database di PostgreSQL
-CREATE USER erlangga WITH ENCRYPTED PASSWORD 'inipassword';
-CREATE DATABASE fashiondb;
+# Creating a database in PostgreSQL
+CREATE USER [DB_USER] WITH ENCRYPTED PASSWORD '[DB_PASSWORD]';
+CREATE DATABASE [DB_NAME];
 
-# Memberikan akses database kepada user
-GRANT ALL ON DATABASE fashiondbdb TO erlangga;
-ALTER DATABASE fashiondb OWNER TO erlangga;
+# Grant database access to users
+GRANT ALL ON DATABASE [DB_NAME] TO [DB_USER];
+ALTER DATABASE [DB_NAME] OWNER TO [DB_USER];
 
-# Menjalankan skrip
+# Run the script
 python main.py
 
-# Masuk kedalam database fashiondb 
-psql --username erlangga --dbname fashiondb
-SELECT * FROM products;
+# Login to postgres database
+psql --username [DB_USER] --dbname [DB_NAME]
+SELECT * FROM [TABLE_NAME];
 
-# Menjalankan unit test pada folder tests
+# Run unit test
 python -m pytest tests
 
-# Menjalankan test coverage pada folder tests
+# Run coverage test
 coverage run -m pytest tests
 
-# Membuka hasil test coverage
+# Check coverage test results
 coverage html
 
-# Url Google Sheets:
+# Google Sheets URL:
 https://docs.google.com/spreadsheets/d/1EUa65GLeKgyEoZMAnOvYIj4DdctIzn4f_MSKijFxVVQ/edit?usp=sharing

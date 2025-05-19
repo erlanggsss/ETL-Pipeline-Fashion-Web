@@ -2,30 +2,29 @@ import psycopg2
 import pandas as pd
 import logging
 
-# Konfigurasi logging
 logging.basicConfig(
     level=logging.INFO, 
     format='%(asctime)s - %(levelname)s: %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
-# Konfigurasi database
+# Database configuration
 DB_CONFIG = {
-    "dbname": "fashiondb",
-    "user": "fashionsdb",
-    "password": "inipassword",
-    "host": "localhost",
-    "port": "5432"
+    "dbname": "[DBNAME]",
+    "user": "[DB_USERNAME]",
+    "password": "[DB_PASSWORD]",
+    "host": "[DB_HOST]",
+    "port": "[DB_LOCALHOST]"
 }
 
 def load_postgre(df, table_name="products"):
     """
-    Menyimpan DataFrame kedalam PostgreSQL
-    
+    Saving DataFrame to PostgreSQL
+
     Args:
-    df (pd.DataFrame): DataFrame yang akan dimuat
-    table_name (str, optional): Nama tabel. Defaults to "products"
-    
+    df (pd.DataFrame): DataFrame to be loaded
+    table_name (str, optional): Table name. Defaults to "products"
+
     Returns:
     None
     """

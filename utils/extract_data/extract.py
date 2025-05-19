@@ -6,7 +6,7 @@ import concurrent.futures
 from typing import List, Dict
 from bs4 import BeautifulSoup
 
-# Konfigurasi logging
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s: %(message)s',
@@ -22,17 +22,17 @@ HEADERS = {
 
 BASE_URL = "https://fashion-studio.dicoding.dev/"
 MAX_PAGES_LIMIT = 50
-MAX_WORKERS = 10  # Jumlah thread concurrent
+MAX_WORKERS = 10 
 
 def scrape_page(url: str) -> List[Dict[str, str]]:
     """
-    Mengambil data produk dari satu halaman website secara concurrent.
+    Fetch product data from one website page concurrently.
 
     Args:
-     url (str): URL halaman web yang akan di-scrape.
+    url (str): URL of the web page to be scraped.
 
     Returns:
-    List[Dict[str, str]]: Daftar produk dengan detail masing-masing.
+    List[Dict[str, str]]: List of products with their respective details.
     """
     try:
         response = requests.get(url, headers=HEADERS, timeout=10)
@@ -82,13 +82,13 @@ def scrape_page(url: str) -> List[Dict[str, str]]:
 
 def generate_urls(max_pages: int = MAX_PAGES_LIMIT) -> List[str]:
     """
-    Menghasilkan daftar URL untuk di-scrape.
+    Returns a list of URLs to scrape.
 
     Args:
-    max_pages (int, optional): Jumlah maksimal halaman. Defaults to MAX_PAGES_LIMIT.
+    max_pages (int, optional): Maximum number of pages. Defaults to MAX_PAGES_LIMIT.
 
     Returns:
-    List[str]: Daftar URL yang akan di-scrape.
+    List[str]: List of URLs to scrape.
     """
     urls = [BASE_URL]
     urls.extend([f"{BASE_URL}page{page}" for page in range(2, max_pages + 1)])
@@ -96,23 +96,24 @@ def generate_urls(max_pages: int = MAX_PAGES_LIMIT) -> List[str]:
 
 def scrape_main(max_pages: int = MAX_PAGES_LIMIT) -> List[Dict[str, str]]:
     """
-    Melakukan scraping produk dari seluruh halaman website secara concurrent.
+    Scrapes products from all pages of a website concurrently.
 
     Args:
-    max_pages (int, optional): Jumlah maksimal halaman yang di-scrape. 
+    max_pages (int, optional): The maximum number of pages to scrape.
+
     Defaults to MAX_PAGES_LIMIT.
 
     Returns
-    List[Dict[str, str]]: Daftar seluruh produk yang berhasil di-scrape.
+    List[Dict[str, str]]: List of all products that were successfully scraped.
     """
     start_time = time.time()
     urls = generate_urls(max_pages)
     all_products = []
 
-    # Gunakan ThreadPoolExecutor untuk scraping concurrent
+    # Use ThreadPoolExecutor for concurrent scraping 
     with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
       
-        # Map URLs ke fungsi scrape_page
+        # Map URLs into scrape_page function
         future_to_url = {executor.submit(scrape_page, url): url for url in urls}
         
         for future in concurrent.futures.as_completed(future_to_url):
@@ -125,7 +126,7 @@ def scrape_main(max_pages: int = MAX_PAGES_LIMIT) -> List[Dict[str, str]]:
             except Exception as e:
                 logging.error(f"Kesalahan saat scraping {url}: {e}")
 
-    # Logging waktu eksekusi
+    # Logging execution time
     execution_time = time.time() - start_time
     print(f"\nTotal waktu scraping: {execution_time:.2f} detik")
     print(f"Total produk yang di-scrape: {len(all_products)}\n")
